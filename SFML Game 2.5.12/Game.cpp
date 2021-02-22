@@ -16,16 +16,23 @@
 #endif 
 
 #include <SFML/Graphics.hpp>
-
 #include <iostream>
-
 #include"Trigonometry.hpp"
-
 #include"VectorAlgebra2D.h" 
+#include "Player.h"
+
+static double const MS_PER_UPDATE = 10.0;
 
 class Game
 {
+
 public:
+
+
+	Player player;
+	sf::Texture playerTextureSheet;
+	sf::Sprite playerSpriteSheet;
+
 	//create Window 
 	sf::RenderWindow window;
 	sf::View view;
@@ -36,10 +43,13 @@ public:
 	//sf::Vector2f gravity{ 0.0f, 9.8f * pixelsPerMeter };
 	float gravity = 9.8f * pixelsPerMeter;
 	sf::Vector2f velocity = { 0,0 };
-	sf::Vector2f position{160, 500};
+	sf::Vector2f position{ 160, 500 };
+
 
 	static const int numRows = 45;
 	static const int numCols = 20;
+
+
 
 	int levelData[numRows][numCols] =
 	{
@@ -88,12 +98,27 @@ public:
 		{ 0,0,0,0,0,0,0,1,1,1,1,1,0,1,0,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 		{ 0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+
 	};
 
 	sf::RectangleShape level[numRows][numCols];
-	Game()
+
+	Game():
+		player(playerSpriteSheet)
 	{
 		window.create(sf::VideoMode(800, 600), "Endless Runner Game");
+		if (!playerTextureSheet.loadFromFile("ASSETS\\IMAGES\\character_robot_sheet.png"))
+		{
+			// error... player texture
+		}
+
+		playerSpriteSheet.setTexture(playerTextureSheet);
+		window.setVerticalSyncEnabled(true);
+		//starField.Init(m_window);
+		player.InitAnimationData();
+		player.startAnimaton(Player::PlayerAnimationState::idle);
+		window.setVerticalSyncEnabled(true);
+	
 	}
 	void init()
 	{
@@ -146,6 +171,7 @@ public:
 	}
 	void run()
 	{
+
 		sf::Time timePerFrame = sf::seconds(1.0f / 60.0f);
 		sf::Time timeSinceLastUpdate = sf::Time::Zero;
 		sf::Clock clock;
@@ -162,6 +188,8 @@ public:
 			if (timeSinceLastUpdate > timePerFrame)
 			{
 				float timeChange = (float)timeSinceLastUpdate.asSeconds();
+				update(timePerFrame); //60 fps
+
 				for (int row = 0; row < numRows; row++)
 				{
 					for (int col = 0; col < numCols; col++)
@@ -280,11 +308,19 @@ public:
 					}
 				}
 				window.draw(playerShape);
+				player.Draw(window);
 				window.display();
 				timeSinceLastUpdate = sf::Time::Zero;
 			}
 		}
 	}
+
+	void update(sf::Time t_deltaTime)
+	{	
+		player.Update(t_deltaTime);
+	}
+
+	
 };
 
 int main()
