@@ -32,18 +32,17 @@ public:
 	Player player;
 	sf::Texture playerTextureSheet;
 	sf::Sprite playerSpriteSheet;
-
 	//create Window 
 	sf::RenderWindow window;
 	sf::View view;
 	float randomNum;
-	sf::RectangleShape playerShape;
+	//sf::RectangleShape playerShape;
 	float pixelsPerMeter = 5;
 	sf::Vector2f jumpPushOff{ 0, -2.4 * pixelsPerMeter };
 	//sf::Vector2f gravity{ 0.0f, 9.8f * pixelsPerMeter };
 	float gravity = 9.8f * pixelsPerMeter;
 	sf::Vector2f velocity = { 0,0 };
-	sf::Vector2f position{ 160, 500 };
+	//sf::Vector2f position{ 160, 500 };
 
 
 	static const int numRows = 45;
@@ -123,8 +122,8 @@ public:
 	void init()
 	{
 		view = window.getDefaultView();
-		playerShape.setSize(sf::Vector2f(20, 20));
-		playerShape.setPosition(position);
+		//playerShape.setSize(sf::Vector2f(20, 20));
+		//playerShape.setPosition(position);
 		for (int row = 0; row < numRows; row++)
 		{
 			for (int col = 0; col < numCols; col++)
@@ -201,10 +200,10 @@ public:
 				{
 					//velocity.y = -11.8;
 					velocity.y = jumpPushOff.y;
-					position = position + velocity * timeChange;
+					player.position = player.position + velocity * timeChange;
 				}
 				velocity.y = velocity.y + gravity;
-				playerShape.move(0, velocity.y);
+				player.spriteSheet.move(0, velocity.y);
 				gravity = 0.6;
 
 				for (int row = 0; row < numRows; row++)
@@ -215,21 +214,21 @@ public:
 						{
 							if (levelData[row][col] == 5)
 							{
-								if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+								if (player.spriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 								{
-									if (playerShape.getPosition().y < level[row][col].getPosition().y)
+									if (player.spriteSheet.getPosition().y < level[row][col].getPosition().y)
 									{
 										gravity = 0;
 										velocity.y = 0;
-										playerShape.setPosition(playerShape.getPosition().x, level[row][col].getPosition().y);
-										playerShape.move(7, -playerShape.getGlobalBounds().height);
+										player.spriteSheet.setPosition(player.spriteSheet.getPosition().x, level[row][col].getPosition().y);
+										player.spriteSheet.move(7, -player.spriteSheet.getGlobalBounds().height);
 										break;
 									}
 								}
 							}
 							if (levelData[row][col] == 4)
 							{
-								if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+								if (player.spriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 								{
 									level[row][col].setFillColor(sf::Color::Black);
 
@@ -237,28 +236,28 @@ public:
 							}
 							if (levelData[row][col] == 3)
 							{
-								if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+								if (player.spriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 								{
-									if (playerShape.getPosition().y < level[row][col].getPosition().y)
+									if (player.spriteSheet.getPosition().y < level[row][col].getPosition().y)
 									{
 										gravity = -4;
 										velocity.y = 0;
-										playerShape.setPosition(playerShape.getPosition().x, level[row][col].getPosition().y);
-										playerShape.move(0, -playerShape.getGlobalBounds().height);
+										player.spriteSheet.setPosition(player.spriteSheet.getPosition().x, level[row][col].getPosition().y);
+										player.spriteSheet.move(0, -player.spriteSheet.getGlobalBounds().height);
 										break;
 									}
 								}
 							}
 							if (levelData[row][col] == 1)
 							{
-								if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+								if (player.spriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 								{
-									if (playerShape.getPosition().y < level[row][col].getPosition().y)
+									if (player.spriteSheet.getPosition().y < level[row][col].getPosition().y)
 									{
 										gravity = 0;
 										velocity.y = 0;
-										playerShape.setPosition(playerShape.getPosition().x, level[row][col].getPosition().y);
-										playerShape.move(0, -playerShape.getGlobalBounds().height);
+										player.spriteSheet.setPosition(player.spriteSheet.getPosition().x, level[row][col].getPosition().y);
+										player.spriteSheet.move(0, -player.spriteSheet.getGlobalBounds().height);
 										break;
 									}
 									else
@@ -272,7 +271,7 @@ public:
 						{
 							if (levelData[row][col] == 1)
 							{
-								if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+								if (player.spriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 								{
 									init();
 								}
@@ -280,14 +279,14 @@ public:
 						}
 						if (levelData[row][col] == 2)
 						{
-							if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+							if (player.spriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 							{
 								init();
 							}
 						}
 						if (levelData[row][col] == 3)
 						{
-							if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+							if (player.spriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 							{
 								init();
 							}
@@ -295,7 +294,7 @@ public:
 
 					}
 				}
-				if (playerShape.getPosition().y > 600)
+				if (player.spriteSheet.getPosition().y > 600)
 				{
 					init();
 				}
@@ -307,7 +306,7 @@ public:
 						window.draw(level[row][col]);
 					}
 				}
-				window.draw(playerShape);
+				//window.draw(playerShape);
 				player.Draw(window);
 				window.display();
 				timeSinceLastUpdate = sf::Time::Zero;
