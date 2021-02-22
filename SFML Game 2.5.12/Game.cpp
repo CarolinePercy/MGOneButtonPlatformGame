@@ -38,8 +38,13 @@ public:
 	sf::Vector2f velocity = { 0,0 };
 	sf::Vector2f position{160, 500};
 
+	sf::Text gameText;
+	sf::Font gameFont;
+
 	static const int numRows = 45;
 	static const int numCols = 20;
+
+	int score = 0;
 
 	int levelData[numRows][numCols] =
 	{
@@ -50,10 +55,10 @@ public:
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2,2 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,1 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,2,1 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,2,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
@@ -94,6 +99,11 @@ public:
 	Game()
 	{
 		window.create(sf::VideoMode(800, 600), "Endless Runner Game");
+		if (!gameFont.loadFromFile("ASSETS/FONTS/ariblk.ttf"))
+		{
+			std::cout << "error loading font";
+		}
+		gameText.setFont(gameFont);
 	}
 	void init()
 	{
@@ -141,6 +151,7 @@ public:
 					level[row][col].setFillColor(sf::Color::Cyan);
 				}
 			}
+			gameText.setCharacterSize(30);
 			std::cout << std::endl;
 		}
 	}
@@ -201,10 +212,11 @@ public:
 							}
 							if (levelData[row][col] == 4)
 							{
-								if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+								if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()) 
+									&& level[row][col].getFillColor() != sf::Color::Black)
 								{
 									level[row][col].setFillColor(sf::Color::Black);
-
+									score++;
 								}
 							}
 							if (levelData[row][col] == 3)
@@ -280,6 +292,8 @@ public:
 					}
 				}
 				window.draw(playerShape);
+				gameText.setString("Score: " + std::to_string(score));
+				window.draw(gameText);
 				window.display();
 				timeSinceLastUpdate = sf::Time::Zero;
 			}
