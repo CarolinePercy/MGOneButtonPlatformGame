@@ -45,6 +45,7 @@ public:
 	sf::Vector2f velocity = { 0,0 };
 	sf::Vector2f position{ 160, 500 };
 
+	sf::Color gameColours[5] = {sf::Color(152, 107, 219), sf::Color(), sf::Color(), sf::Color(), sf::Color()};
 
 	static const int numRows = 45;
 	static const int numCols = 20;
