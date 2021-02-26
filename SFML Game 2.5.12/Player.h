@@ -10,7 +10,6 @@ public:
 	PlayerAnimationState animationState = PlayerAnimationState::idle;
 	Animation animations[5];
 	AnimationSheet animSheet;
-	sf::Vector2f position;
 	sf::Sprite& spriteSheet;
 	int robotWalkingSpeed = 1;
 	int robotRunningSpeed = 3;
@@ -26,8 +25,8 @@ public:
 		animations[int(PlayerAnimationState::idle)] = { 1,0,80,true };
 		animationState = PlayerAnimationState::idle;
 		animSheet.Init(spriteSheet.getGlobalBounds().width, spriteSheet.getGlobalBounds().height, 5, 9);
-		spriteSheet.setPosition(50, 100);
-		spriteSheet.setOrigin(160, 500);
+		spriteSheet.setPosition(160, 500);
+		spriteSheet.setOrigin(50, 48);
 
 
 	}
