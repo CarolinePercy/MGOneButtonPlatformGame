@@ -46,10 +46,13 @@ public:
 	sf::Vector2f position{ 160, 500 };
 
 
+	sf::Text gameText;
+	sf::Font gameFont;
+
 	static const int numRows = 45;
 	static const int numCols = 20;
 
-
+	int score = 0;
 
 	int levelData[numRows][numCols] =
 	{
@@ -60,10 +63,10 @@ public:
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2,2 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,1 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,2,1 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,2,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
@@ -107,6 +110,7 @@ public:
 		player(playerSpriteSheet)
 	{
 		window.create(sf::VideoMode(800, 600), "Endless Runner Game");
+
 		if (!playerTextureSheet.loadFromFile("ASSETS\\IMAGES\\character_robot_sheet.png"))
 		{
 			// error... player texture
@@ -119,6 +123,11 @@ public:
 		player.startAnimaton(Player::PlayerAnimationState::run);
 		window.setVerticalSyncEnabled(true);
 	
+		if (!gameFont.loadFromFile("ASSETS/FONTS/ariblk.ttf"))
+		{
+			std::cout << "error loading font";
+		}
+		gameText.setFont(gameFont);
 	}
 	void init()
 	{
@@ -166,6 +175,7 @@ public:
 					level[row][col].setFillColor(sf::Color::Cyan);
 				}
 			}
+			gameText.setCharacterSize(30);
 			std::cout << std::endl;
 		}
 	}
@@ -231,10 +241,11 @@ public:
 							}
 							if (levelData[row][col] == 4)
 							{
-								if (playerSpriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+								if (playerSpriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds())
+									&& level[row][col].getFillColor() != sf::Color::Black)
 								{
 									level[row][col].setFillColor(sf::Color::Black);
-
+									score++;
 								}
 							}
 							if (levelData[row][col] == 3)
@@ -311,6 +322,10 @@ public:
 				}
 				//window.draw(playerSpriteSheet);
 				player.Draw(window);
+
+				gameText.setString("Score: " + std::to_string(score));
+				window.draw(gameText);
+
 				window.display();
 				timeSinceLastUpdate = sf::Time::Zero;
 			}
