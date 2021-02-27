@@ -25,7 +25,8 @@ public:
 		animationState = PlayerAnimationState::run;
 		animSheet.Init(spriteSheet.getGlobalBounds().width, spriteSheet.getGlobalBounds().height, 5, 9);
 		spriteSheet.setPosition(160, 500);
-		//spriteSheet.setOrigin(50, 48);
+
+		spriteSheet.setScale(0.4, 0.4);
 
 
 	}
