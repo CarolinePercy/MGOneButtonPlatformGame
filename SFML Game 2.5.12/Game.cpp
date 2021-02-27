@@ -178,7 +178,7 @@ public:
 	{
 		view = window.getDefaultView();
 		//playerShape.setSize(sf::Vector2f(20, 20));
-		//playerShape.setPosition(position);
+		playerSpriteSheet.setPosition(160, 500);
 		for (int row = 0; row < numRows; row++)
 		{
 			for (int col = 0; col < numCols; col++)
