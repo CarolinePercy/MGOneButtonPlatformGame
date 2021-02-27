@@ -26,7 +26,7 @@ public:
 		animationState = PlayerAnimationState::idle;
 		animSheet.Init(spriteSheet.getGlobalBounds().width, spriteSheet.getGlobalBounds().height, 5, 9);
 		spriteSheet.setPosition(160, 500);
-		spriteSheet.setOrigin(50, 48);
+		//spriteSheet.setOrigin(50, 48);
 
 
 	}
