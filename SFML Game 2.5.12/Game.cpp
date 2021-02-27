@@ -37,7 +37,7 @@ public:
 	sf::RenderWindow window;
 	sf::View view;
 	float randomNum;
-	sf::RectangleShape playerShape;
+	//sf::RectangleShape playerShape;
 	float pixelsPerMeter = 5;
 	sf::Vector2f jumpPushOff{ 0, -2.4 * pixelsPerMeter };
 	//sf::Vector2f gravity{ 0.0f, 9.8f * pixelsPerMeter };
@@ -47,10 +47,13 @@ public:
 
 	sf::Color gameColours[5] = {sf::Color(152, 107, 219), sf::Color(), sf::Color(), sf::Color(), sf::Color()};
 
-	static const int numRows = 45;
+	sf::Text gameText;
+	sf::Font gameFont;
+
+	static const int numRows = 49;
 	static const int numCols = 20;
 
-
+	int score = 0;
 
 	int levelData[numRows][numCols] =
 	{
@@ -59,19 +62,23 @@ public:
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2,2 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,1 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,2,1 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,2,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0 },
-		{ 0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
@@ -80,13 +87,13 @@ public:
 		{ 0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,5,1,1,1,1,0,0 },
-		{ 0,0,0,1,1,1,0,0,0,0,0,0,4,5,0,0,0,0,0,0 },
-		{ 0,0,0,0,0,0,0,1,1,1,1,1,0,5,0,0,0,0,0,0 },
+		{ 0,0,0,1,0,0,0,0,0,0,0,0,4,5,0,0,0,0,0,0 },
+		{ 0,0,0,0,0,0,0,1,1,0,0,0,0,5,0,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-		{ 0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+		{ 0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-		{ 0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
@@ -108,6 +115,7 @@ public:
 		player(playerSpriteSheet)
 	{
 		window.create(sf::VideoMode(800, 600), "Endless Runner Game");
+
 		if (!playerTextureSheet.loadFromFile("ASSETS\\IMAGES\\character_robot_sheet.png"))
 		{
 			// error... player texture
@@ -117,15 +125,20 @@ public:
 		window.setVerticalSyncEnabled(true);
 		//starField.Init(m_window);
 		player.InitAnimationData();
-		player.startAnimaton(Player::PlayerAnimationState::idle);
+		player.startAnimaton(Player::PlayerAnimationState::run);
 		window.setVerticalSyncEnabled(true);
 	
+		if (!gameFont.loadFromFile("ASSETS/FONTS/ariblk.ttf"))
+		{
+			std::cout << "error loading font";
+		}
+		gameText.setFont(gameFont);
 	}
 	void init()
 	{
 		view = window.getDefaultView();
-		playerShape.setSize(sf::Vector2f(20, 20));
-		playerShape.setPosition(position);
+		//playerShape.setSize(sf::Vector2f(20, 20));
+		//playerShape.setPosition(position);
 		for (int row = 0; row < numRows; row++)
 		{
 			for (int col = 0; col < numCols; col++)
@@ -167,6 +180,7 @@ public:
 					level[row][col].setFillColor(sf::Color::Cyan);
 				}
 			}
+			gameText.setCharacterSize(30);
 			std::cout << std::endl;
 		}
 	}
@@ -205,7 +219,7 @@ public:
 					position = position + velocity * timeChange;
 				}
 				velocity.y = velocity.y + gravity;
-				playerShape.move(0, velocity.y);
+				playerSpriteSheet.move(0, velocity.y);
 				gravity = 0.6;
 
 				for (int row = 0; row < numRows; row++)
@@ -216,50 +230,51 @@ public:
 						{
 							if (levelData[row][col] == 5)
 							{
-								if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+								if (playerSpriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 								{
-									if (playerShape.getPosition().y < level[row][col].getPosition().y)
+									if (playerSpriteSheet.getPosition().y < level[row][col].getPosition().y)
 									{
 										gravity = 0;
 										velocity.y = 0;
-										playerShape.setPosition(playerShape.getPosition().x, level[row][col].getPosition().y);
-										playerShape.move(7, -playerShape.getGlobalBounds().height);
+										playerSpriteSheet.setPosition(playerSpriteSheet.getPosition().x, level[row][col].getPosition().y);
+										playerSpriteSheet.move(7, -playerSpriteSheet.getGlobalBounds().height);
 										break;
 									}
 								}
 							}
 							if (levelData[row][col] == 4)
 							{
-								if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+								if (playerSpriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds())
+									&& level[row][col].getFillColor() != sf::Color::Black)
 								{
 									level[row][col].setFillColor(sf::Color::Black);
-
+									score++;
 								}
 							}
 							if (levelData[row][col] == 3)
 							{
-								if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+								if (playerSpriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 								{
-									if (playerShape.getPosition().y < level[row][col].getPosition().y)
+									if (playerSpriteSheet.getPosition().y < level[row][col].getPosition().y)
 									{
 										gravity = -4;
 										velocity.y = 0;
-										playerShape.setPosition(playerShape.getPosition().x, level[row][col].getPosition().y);
-										playerShape.move(0, -playerShape.getGlobalBounds().height);
+										playerSpriteSheet.setPosition(playerSpriteSheet.getPosition().x, level[row][col].getPosition().y);
+										playerSpriteSheet.move(0, -playerSpriteSheet.getGlobalBounds().height);
 										break;
 									}
 								}
 							}
 							if (levelData[row][col] == 1)
 							{
-								if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+								if (playerSpriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 								{
-									if (playerShape.getPosition().y < level[row][col].getPosition().y)
+									if (playerSpriteSheet.getPosition().y  < level[row][col].getPosition().y)
 									{
 										gravity = 0;
 										velocity.y = 0;
-										playerShape.setPosition(playerShape.getPosition().x, level[row][col].getPosition().y);
-										playerShape.move(0, -playerShape.getGlobalBounds().height);
+										playerSpriteSheet.setPosition(playerSpriteSheet.getPosition().x, level[row][col].getPosition().y);
+										playerSpriteSheet.move(0, -playerSpriteSheet.getGlobalBounds().height);
 										break;
 									}
 									else
@@ -273,7 +288,7 @@ public:
 						{
 							if (levelData[row][col] == 1)
 							{
-								if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+								if (playerSpriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 								{
 									init();
 								}
@@ -281,14 +296,14 @@ public:
 						}
 						if (levelData[row][col] == 2)
 						{
-							if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+							if (playerSpriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 							{
 								init();
 							}
 						}
 						if (levelData[row][col] == 3)
 						{
-							if (playerShape.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+							if (playerSpriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
 							{
 								init();
 							}
@@ -296,7 +311,7 @@ public:
 
 					}
 				}
-				if (playerShape.getPosition().y > 600)
+				if (playerSpriteSheet.getPosition().y > 600)
 				{
 					init();
 				}
@@ -308,8 +323,12 @@ public:
 						window.draw(level[row][col]);
 					}
 				}
-				window.draw(playerShape);
+				//window.draw(playerSpriteSheet);
 				player.Draw(window);
+
+				gameText.setString("Score: " + std::to_string(score));
+				window.draw(gameText);
+
 				window.display();
 				timeSinceLastUpdate = sf::Time::Zero;
 			}
