@@ -33,6 +33,12 @@ public:
 	sf::Texture playerTextureSheet;
 	sf::Sprite playerSpriteSheet;
 
+	sf::Texture coinTexture;
+	sf::Sprite coinSprite;
+	Animation coinAnimation = { 5, 0, 2, true };
+	AnimationSheet coinSheet;
+	
+
 	//create Window 
 	sf::RenderWindow window;
 	sf::View view;
@@ -120,12 +126,22 @@ public:
 			// error... player texture
 		}
 
+		if (!coinTexture.loadFromFile("ASSETS\\IMAGES\\MonedaD.png"))
+		{
+			// error... player texture
+		}
+
 		playerSpriteSheet.setTexture(playerTextureSheet);
 		window.setVerticalSyncEnabled(true);
 		//starField.Init(m_window);
 		player.InitAnimationData();
 		player.startAnimaton(Player::PlayerAnimationState::run);
 		window.setVerticalSyncEnabled(true);
+
+		coinSprite.setTexture(coinTexture);
+		coinSprite.setScale(2, 2);
+		coinSheet.Init(coinSprite.getGlobalBounds().width, coinSprite.getGlobalBounds().height, 1, 10);
+		coinSheet.StartAnimation(coinAnimation);
 	
 		if (!gameFont.loadFromFile("ASSETS/FONTS/ariblk.ttf"))
 		{
@@ -225,7 +241,7 @@ public:
 				{
 					for (int col = 0; col < numCols; col++)
 					{
-						if (velocity.y >= 0)
+						//if (velocity.y >= 0)
 						{
 							if (levelData[row][col] == 5)
 							{
@@ -314,12 +330,23 @@ public:
 				{
 					init();
 				}
+				
+				coinSheet.nextFrame();
+				coinSprite.setTextureRect(coinSheet.GetFrame());
 				window.clear();
 				for (int row = 0; row < numRows; row++)
 				{
 					for (int col = 0; col < numCols; col++)
 					{
-						window.draw(level[row][col]);
+						if (levelData[row][col] == 4 && level[row][col].getFillColor() != sf::Color::Black)
+						{
+							coinSprite.setPosition(level[row][col].getPosition());
+							window.draw(coinSprite);
+						}
+						else
+						{
+							window.draw(level[row][col]);
+						}
 					}
 				}
 				//window.draw(playerSpriteSheet);
