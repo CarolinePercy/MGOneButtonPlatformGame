@@ -50,7 +50,12 @@ public:
 	sf::Text gameText;
 	sf::Font gameFont;
 
-	static const int numRows = 56;
+	bool gameEnd = false;
+	sf::Text endGameText;
+	sf::Font endGameFont;
+
+
+	static const int numRows = 57;
 	static const int numCols = 20;
 
 	int score = 0;
@@ -112,7 +117,9 @@ public:
 		{ 0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,0,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,1,1,1,1,0,0,0,1,0,0,0,0,0 },
-		{ 0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+		{ 0,0,1,1,1,1,1,0,0,0,0,0,0,0,6,0,0,0,0,0 },
+		{ 0,0,1,1,1,1,1,0,0,0,0,0,0,0,6,0,0,0,0,0 }
+
 
 	};
 
@@ -140,6 +147,16 @@ public:
 			std::cout << "error loading font";
 		}
 		gameText.setFont(gameFont);
+		gameText.setCharacterSize(30);
+
+		if (!endGameFont.loadFromFile("ASSETS/FONTS/ariblk.ttf"))
+		{
+			std::cout << "error loading font";
+		}
+		endGameText.setFont(gameFont);
+		endGameText.setCharacterSize(100);
+		endGameText.setString("Game Over!");
+		endGameText.setPosition(90, 100);
 	}
 	void init()
 	{
@@ -186,8 +203,13 @@ public:
 					level[row][col].setPosition(row * 70, col * 30);
 					level[row][col].setFillColor(sf::Color::Color(126, 21, 255));
 				}
+				if (levelData[row][col] == 6)
+				{
+					level[row][col].setSize(sf::Vector2f(70, 70));
+					level[row][col].setPosition(row * 70, col * 30);
+					level[row][col].setFillColor(sf::Color::Color(155,255,10));
+				}
 			}
-			gameText.setCharacterSize(30);
 			std::cout << std::endl;
 		}
 	}
@@ -315,6 +337,13 @@ public:
 								init();
 							}
 						}
+						if (levelData[row][col] == 6)
+						{
+							if (playerSpriteSheet.getGlobalBounds().intersects(level[row][col].getGlobalBounds()))
+							{
+								gameEnd = true;
+							}
+						}
 
 					}
 				}
@@ -322,6 +351,7 @@ public:
 				{
 					init();
 				}
+				
 				window.clear();
 				for (int row = 0; row < numRows; row++)
 				{
@@ -335,7 +365,14 @@ public:
 
 				gameText.setString("Score: " + std::to_string(score));
 				window.draw(gameText);
-
+				if (gameEnd)
+				{
+					window.clear();
+					window.draw(endGameText);
+					gameText.setPosition(300, 300);
+					gameText.setCharacterSize(70);
+					window.draw(gameText);
+				}
 				window.display();
 				timeSinceLastUpdate = sf::Time::Zero;
 			}
