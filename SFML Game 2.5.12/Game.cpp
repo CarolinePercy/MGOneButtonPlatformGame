@@ -233,7 +233,7 @@ public:
 				{
 					for (int col = 0; col < numCols; col++)
 					{
-						if (velocity.y >= 0)
+						if (velocity.y > 0)
 						{
 							if (levelData[row][col] == 5)
 							{
@@ -245,6 +245,7 @@ public:
 										velocity.y = 0;
 										playerSpriteSheet.setPosition(playerSpriteSheet.getPosition().x, level[row][col].getPosition().y);
 										playerSpriteSheet.move(7, -playerSpriteSheet.getGlobalBounds().height);
+										player.playerOnGROUND = true;
 										break;
 									}
 								}
@@ -268,6 +269,7 @@ public:
 										velocity.y = 0;
 										playerSpriteSheet.setPosition(playerSpriteSheet.getPosition().x, level[row][col].getPosition().y);
 										playerSpriteSheet.move(0, -playerSpriteSheet.getGlobalBounds().height);
+										player.playerOnGROUND = true;
 										break;
 									}
 								}
@@ -282,6 +284,7 @@ public:
 										velocity.y = 0;
 										playerSpriteSheet.setPosition(playerSpriteSheet.getPosition().x, level[row][col].getPosition().y);
 										playerSpriteSheet.move(0, -playerSpriteSheet.getGlobalBounds().height);
+										player.playerOnGROUND = true;
 										break;
 									}
 									else
@@ -291,7 +294,7 @@ public:
 								}
 							}
 						}
-						if (velocity.y < 0)
+						if (velocity.y <= 0)
 						{
 							if (levelData[row][col] == 1)
 							{
