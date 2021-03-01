@@ -3,17 +3,17 @@
 #include <SFML/Graphics.hpp> 
 #include "Animation.h"
 
+enum class PlayerAnimationState { run, jump };
+
 class Player
 {
 public:
-	enum class PlayerAnimationState {run, jump}; 
 	PlayerAnimationState animationState = PlayerAnimationState::run;
 	Animation animations[5];
 	AnimationSheet animSheet;
 	sf::Sprite& spriteSheet;
 	int robotWalkingSpeed = 1;
 	int robotRunningSpeed = 3;
-	bool playerOnGROUND = false;
 
 	Player(sf::Sprite& spheet) : spriteSheet(spheet) 
 	{ }
@@ -49,26 +49,22 @@ public:
 
 		if (animationState == PlayerAnimationState::run) 
 		{ 
-			playerOnGROUND = true;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) 
 				{ 
-				playerOnGROUND = false;
 					animationState = PlayerAnimationState::jump;
 					startAnimaton(animationState);
-				} 
-
-			
-			}
-		else if (animationState == PlayerAnimationState::jump)
-		{
-			if (playerOnGROUND)
-			{
-				animationState = PlayerAnimationState::run;
-				startAnimaton(animationState);
-			}
-		}
+				} 			
+			}		
 				
-	}	
+	}
+
+	void playerHitGround()
+	{
+		if (animationState == PlayerAnimationState::jump)
+		{
+			startAnimaton(PlayerAnimationState::run);
+		}
+	}
 	
 };
 

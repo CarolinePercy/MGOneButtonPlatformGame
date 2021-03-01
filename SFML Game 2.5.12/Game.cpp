@@ -82,7 +82,7 @@ public:
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,2,1 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,1,0,0,0,1 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,0,0,0,0 },
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
@@ -150,7 +150,7 @@ public:
 		window.setVerticalSyncEnabled(true);
 		//starField.Init(m_window);
 		player.InitAnimationData();
-		player.startAnimaton(Player::PlayerAnimationState::run);
+		player.startAnimaton(PlayerAnimationState::run);
 		window.setVerticalSyncEnabled(true);
 
 		coinSprite.setTexture(coinTexture);
@@ -283,7 +283,7 @@ public:
 										velocity.y = 0;
 										playerSpriteSheet.setPosition(playerSpriteSheet.getPosition().x, level[row][col].getPosition().y);
 										playerSpriteSheet.move(7, -playerSpriteSheet.getGlobalBounds().height);
-										player.playerOnGROUND = true;
+										player.playerHitGround();
 										break;
 									}
 								}
@@ -307,7 +307,7 @@ public:
 										velocity.y = 0;
 										playerSpriteSheet.setPosition(playerSpriteSheet.getPosition().x, level[row][col].getPosition().y);
 										playerSpriteSheet.move(0, -playerSpriteSheet.getGlobalBounds().height);
-										player.playerOnGROUND = true;
+										player.playerHitGround();
 										break;
 									}
 								}
@@ -322,7 +322,7 @@ public:
 										velocity.y = 0;
 										playerSpriteSheet.setPosition(playerSpriteSheet.getPosition().x, level[row][col].getPosition().y);
 										playerSpriteSheet.move(0, -playerSpriteSheet.getGlobalBounds().height);
-										player.playerOnGROUND = true;
+										player.playerHitGround();
 										break;
 									}
 									else
